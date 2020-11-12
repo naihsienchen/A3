@@ -1,0 +1,12 @@
+﻿
+@model IEnumerable<A3.Models.Teacher>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+<p>This page gives us a complete list of the teachers in School Database.</p>
+
+@foreach (var teacher in Model) { 
+<div><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname</a></div>
+}
