@@ -128,7 +128,8 @@ namespace A3.Controllers
             //SQL QUERY
             cmd.CommandText = "select teachers.teacherid, classid, classname, classcode FROM teachers inner join classes on teachers.teacherid = classes.teacherid where teachers.teacherid =" + id;
             //Question: when I run this query, there is an alert message suggesting my syntax in search query is problematic. 
-            //But when I run the query in MySQL, it seems okay. The problem should be either in line 129 or 134 but I don't have time to troubleshoot now. Will move to #5105 checkpoint 1 first.
+            //But when I run the query in MySQL, it seems okay. The problem should be either in line 129 or 134.
+            //screenshot in 1st layer of the repository-->errormsg.jpg
 
             //Gather Result Set of Query into a variable
             MySqlDataReader ResultSet = cmd.ExecuteReader();
