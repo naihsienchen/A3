@@ -4,10 +4,18 @@
     ViewBag.Title = "List";
 }
 
-<h2>List of Teachers</h2>
-<h3>This page gives us a complete list of the teachers in School Database.</h3>
+<div class="page-container">
+    <h2>List of Teachers</h2>
+    <h3>Complete list of teachers in School Database</h3>
 
-@foreach (var teacher in Model) { 
-<div><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname</a></div>
+    <nav>
+        <a class="navlink" href="/Teacher/New">Add a New Teacher</a>
+    </nav>
 
-}
+    @foreach (var teacher in Model)
+    {
+        <div class="content-container"><a href="/Teacher/Show/@teacher.TeacherId">@teacher.TeacherFname @teacher.TeacherLname</a></div>
+
+    }
+
+</div>

@@ -3,11 +3,13 @@
     ViewBag.Title = "Show";
 }
 
-<h2>Teacher info</h2>
-<h3>This page shows a particular teacher's information.</h3>
-<p>Teacher's name: @Model.TeacherFname @Model.TeacherLname</p>
-<p>Employee number: @Model.EmployeeNumber</p>
-<!--retreiving info on courses a teacher taught-->
-<p>Courses info: (under construction)
-<!--haven't been able to get the controller up and running-->
-<p><a href="/Teacher/List">Back to the List</a></p>
+<div class="page-container">
+    <nav>
+        <a class="navlink" href="/Teacher/List">Back to the List</a>
+        <a class="dellink" href="/Teacher/DeleteConfirm/@Model.TeacherId">Delete this teacher</a>
+    </nav>
+    <h2>Teacher info</h2>
+    <h3>This page shows a particular teacher's information.</h3>
+    <p>Teacher's name: @Model.TeacherFname @Model.TeacherLname</p>
+    <p>Employee number: @Model.EmployeeNumber</p>
+ </div>

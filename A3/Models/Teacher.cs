@@ -11,6 +11,7 @@ namespace A3.Models
         public int TeacherId;
         public string TeacherFname;
         public string TeacherLname;
+        public string TeacherInfo;
         public string EmployeeNumber;
     }
 

@@ -1,9 +1,10 @@
-﻿using A3.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using A3.Models;
+using System.Diagnostics;
 
 namespace A3.Controllers
 {
@@ -28,6 +29,52 @@ namespace A3.Controllers
             TeacherDataController controller = new TeacherDataController();
             Teacher NewTeacher = controller.FindTeacher(id);
             return View(NewTeacher);
+        }
+
+        //GET : /Teacher/DeleteConfirm/{id}
+        public ActionResult DeleteConfirm(int id)
+        {
+            TeacherDataController controller = new TeacherDataController();
+            Teacher NewTeacher = controller.FindTeacher(id);
+            return View(NewTeacher);
+        }
+
+        //POST : /Teacher/Delete/{id}
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            TeacherDataController controller = new TeacherDataController();
+            controller.DeleteTeacher(id);
+            return RedirectToAction("List");
+        }
+
+        //GET : /Teacher/New
+        public ActionResult New()
+        {
+            return View();
+        }
+        
+        //POST : /Teacher/Create
+        [HttpPost]
+        public ActionResult Create(string TeacherFname, string TeacherLname,  string EmployeeNumber)
+        {
+            //Identifying is this method is running
+            //Identifying the inputs provided from the form
+            Debug.WriteLine("Created!");
+            Debug.WriteLine(TeacherFname);
+            Debug.WriteLine(TeacherLname);
+            Debug.WriteLine(EmployeeNumber);
+
+            Teacher NewTeacher = new Teacher();
+            NewTeacher.TeacherFname = TeacherFname;
+            NewTeacher.TeacherLname = TeacherLname;
+            NewTeacher.EmployeeNumber = EmployeeNumber;
+
+            // Accessing AddTeacher method in TeacherDataController
+            TeacherDataController controller = new TeacherDataController();
+            controller.AddTeacher(NewTeacher);
+
+            return RedirectToAction("List");
         }
 
 

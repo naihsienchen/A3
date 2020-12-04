@@ -48,19 +48,19 @@ namespace A3.Controllers
             {
                 //Access Column information by the DB column name as an index
                 int TeacherId = (int)ResultSet["teacherid"];
-                string TeacherFname = (string)ResultSet["teacherfname"];
-                string TeacherLname= (string)ResultSet["teacherlname"];
-                string EmployeeNumber = (string)ResultSet["employeenumber"];
+                string TeacherFname = (string)ResultSet["teacherfname"].ToString();
+                string TeacherLname = (string)ResultSet["teacherlname"].ToString();
+                string EmployeeNumber = (string)ResultSet["employeenumber"].ToString();
 
                 Teacher NewTeacher = new Teacher();
                 NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFname = TeacherFname;
                 NewTeacher.TeacherLname = TeacherLname;
-                NewTeacher.EmployeeNumber= EmployeeNumber;
+                NewTeacher.EmployeeNumber = EmployeeNumber;
 
                 //Add the teacher name to the list
                 Teachers.Add(NewTeacher);
-           
+
             }
             //Close the connection btw MySQL db and the WebServer
             Conn.Close();
@@ -73,7 +73,7 @@ namespace A3.Controllers
         public Teacher FindTeacher(int id)
         {
             Teacher NewTeacher = new Teacher();
-            
+
             //Create an instance of a connection
             MySqlConnection Conn = School.AccessDatabase();
 
@@ -84,7 +84,7 @@ namespace A3.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            cmd.CommandText = "Select * from Teachers where teacherid = "+id;
+            cmd.CommandText = "Select * from Teachers where teacherid = " + id;
 
             //Gather Result Set of Query into a variable
             MySqlDataReader ResultSet = cmd.ExecuteReader();
@@ -104,17 +104,14 @@ namespace A3.Controllers
             }
             return NewTeacher;
         }
-        
-        //This Controller will access the teachers table of school database.
+
         /// <summary>
-        /// Returns a list of classes a teacher teachers in the system
+        ///
         /// </summary>
-        /// <example>GET api/TeacherData/ListClasses/{TeacherId}</example>
-        /// <returns>
-        /// A list of classes a teacher teaches
-        /// </returns>
-        [HttpGet]
-        public IEnumerable<Course> ListCourses(int id)
+        /// <param name="id"></param>
+        /// <example>POST : /api/TeacherData/DeleteTeacher/3</example>
+        [HttpPost]
+        public void DeleteTeacher(int id)
         {
             //Create an instance of a connection
             MySqlConnection Conn = School.AccessDatabase();
@@ -126,42 +123,41 @@ namespace A3.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            cmd.CommandText = "select teachers.teacherid, classid, classname, classcode FROM teachers inner join classes on teachers.teacherid = classes.teacherid where teachers.teacherid =" + id;
-            //Question: when I run this query, there is an alert message suggesting my syntax in search query is problematic. 
-            //But when I run the query in MySQL, it seems okay. The problem should be either in line 129 or 134.
-            //screenshot in 1st layer of the repository-->errormsg.jpg
+            cmd.CommandText = "Delete from teachers where teacherid=@id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
 
-            //Gather Result Set of Query into a variable
-            MySqlDataReader ResultSet = cmd.ExecuteReader();
+            cmd.ExecuteNonQuery();
 
-            //Create an empty list of Classes
-            List<Course> Courses = new List<Course> { };
-
-            //Find courses info for a particular teacher with Result Set
-            while (ResultSet.Read())
-            {
-                //Access Column information by the DB column name as an index
-                int TeacherId = (int)ResultSet["teacherid"];
-                int CourseId = (int)ResultSet["classid"];
-                string CourseCode = (string)ResultSet["classcode"];
-                string CourseName = (string)ResultSet["classname"];
-                
-
-                Course NewCourse = new Course();
-                NewCourse.TeacherId = TeacherId;
-                NewCourse.CourseCode = CourseCode;
-                NewCourse.CourseName = CourseName;
-                NewCourse.CourseId = CourseId;
-
-                //Add classes to the list
-                Courses.Add(NewCourse);
-
-            }
-            //Close the connection btw MySQL db and the WebServer
             Conn.Close();
 
-            //Return the final list of author names
-            return Courses;
+        }
+
+        [HttpPost]
+        public void AddTeacher(Teacher NewTeacher)
+        {
+            //Create an instance of a connection
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //Open the connection between the web server and database
+            Conn.Open();
+
+            //Establish a new command (query) for our database
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //SQL QUERY
+            cmd.CommandText = "insert into teachers (teacherfname, teacherlname, employeenumber) values (@TeacherFname, @TeacherLname, @EmployeeNumber)";
+
+            cmd.Parameters.AddWithValue("@TeacherFname", NewTeacher.TeacherFname);
+            cmd.Parameters.AddWithValue("@TeacherLname", NewTeacher.TeacherLname);
+            cmd.Parameters.AddWithValue("@EmployeeNumber", NewTeacher.EmployeeNumber);
+
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+
         }
     }
 }
