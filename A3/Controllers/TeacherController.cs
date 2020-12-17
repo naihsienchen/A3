@@ -27,8 +27,8 @@ namespace A3.Controllers
         public ActionResult Show(int id)
         {
             TeacherDataController controller = new TeacherDataController();
-            Teacher NewTeacher = controller.FindTeacher(id);
-            return View(NewTeacher);
+            Teacher SelectedTeacher = controller.FindTeacher(id);
+            return View(SelectedTeacher);
         }
 
         //GET : /Teacher/DeleteConfirm/{id}
@@ -75,6 +75,40 @@ namespace A3.Controllers
             controller.AddTeacher(NewTeacher);
 
             return RedirectToAction("List");
+        }
+
+        //GET : /Teacher/Update/{id}
+        public ActionResult Update(int id)
+        {
+            TeacherDataController controller = new TeacherDataController();
+            Teacher SelectedTeacher = controller.FindTeacher(id);
+
+            return View(SelectedTeacher);
+
+        }
+
+        /// <summary>
+        /// Receives a POST request with updated information about an existing teacher in the system with new values. Conveys this information to API, and redirects to the "Teacher Show" page of the updated teacher.
+        /// </summary>
+        /// <param name="id">id of teacher to update</param>
+        /// <param name="TeacherFname">Updated first name of teacher</param>
+        /// <param name="TeacherLname">Updated last name of teacher</param>
+        /// <param name="EmployeeNumber">Updated employee number of teacher</param>
+        /// <returns>A dynamic webpage which provides the current information of the teacher</returns>
+        /// <example>POST : /Teacher/Update/{id}</example>
+        [HttpPost]
+        public ActionResult Update(int id, string TeacherFname, string TeacherLname, string EmployeeNumber)
+        {
+            Teacher TeacherInfo = new Teacher();
+            TeacherInfo.TeacherFname = TeacherFname;
+            TeacherInfo.TeacherLname = TeacherLname;
+            TeacherInfo.EmployeeNumber = EmployeeNumber;
+          
+            TeacherDataController controller = new TeacherDataController();
+            controller.UpdateTeacher(id, TeacherInfo);
+
+            return RedirectToAction("Show/" + id);
+
         }
 
 
